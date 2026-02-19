@@ -1,3 +1,4 @@
+
 name: SonarQube Analysis
 
 on:
@@ -11,27 +12,17 @@ jobs:
 
     steps:
       # 1️⃣ Télécharger le code
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # 2️⃣ Installer Java (FIX ICI ✅)
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      # 2️⃣ Installer Java
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3️⃣ Installer sonar-scanner
-      - name: Install SonarScanner
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sonar-scanner
-
-      # 4️⃣ Lancer analyse SonarQube
-      - name: Run SonarScanner
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=Git \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      # 3️⃣ Analyse SonarQube (OFFICIEL ✅)
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
